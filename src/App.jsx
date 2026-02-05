@@ -15,7 +15,15 @@ import {
   CreditCard,
   ChevronRight,
   Menu,
-  X
+  X,
+  Bitcoin,
+  Bot,
+  ArrowLeftRight,
+  Twitter,
+  Instagram,
+  Linkedin,
+  Github,
+  Wifi
 } from 'lucide-react'
 
 // SafeIcon Component
@@ -36,35 +44,17 @@ const SafeIcon = ({ name, size = 24, className = '', color }) => {
     chevronRight: ChevronRight,
     menu: Menu,
     x: X,
-    bitcoin: () => (
-      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-        <path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727" />
-      </svg>
-    ),
-    bot: () => (
-      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-        <path d="M12 8V4H8" />
-        <rect width="16" height="12" x="4" y="8" rx="2" />
-        <path d="M2 14h2" />
-        <path d="M20 14h2" />
-        <path d="M15 13v2" />
-        <path d="M9 13v2" />
-      </svg>
-    ),
-    exchange: () => (
-      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-        <path d="M12 5v14" />
-        <path d="m19 12-7 7-7-7" />
-        <path d="M19 5H5" />
-      </svg>
-    )
+    bitcoin: Bitcoin,
+    bot: Bot,
+    exchange: ArrowLeftRight,
+    twitter: Twitter,
+    instagram: Instagram,
+    linkedin: Linkedin,
+    github: Github,
+    wifi: Wifi
   }
 
   const IconComponent = icons[name] || icons.shield
-
-  if (typeof IconComponent === 'function' && IconComponent.name === '') {
-    return <IconComponent />
-  }
 
   return <IconComponent size={size} className={className} color={color} />
 }
@@ -242,35 +232,49 @@ const WaveSlider = () => {
       {/* Wave Slider */}
       <div className="relative mb-10">
         <div className="relative h-16 bg-slate-800/50 rounded-2xl overflow-hidden">
-          {/* Wave Animation */}
+          {/* Base Track - Dark Background */}
+          <div className="absolute inset-0 bg-slate-800 rounded-2xl" />
+
+          {/* Wave Animation Fill */}
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-violet-600 via-purple-500 to-blue-500"
+            className="absolute inset-y-0 left-0 bg-gradient-to-r from-violet-600 via-purple-500 to-blue-500"
             style={{
-              clipPath: `polygon(0% 100%, ${(value / maxValue) * 100}% 100%, ${(value / maxValue) * 100}% ${50 - Math.sin(Date.now() / 500) * 20}%, 0% 50%)`
+              width: `${(value / maxValue) * 100}%`
             }}
             animate={{
-              clipPath: [
-                `polygon(0% 100%, ${(value / maxValue) * 100}% 100%, ${(value / maxValue) * 100}% 30%, 0% 50%)`,
-                `polygon(0% 100%, ${(value / maxValue) * 100}% 100%, ${(value / maxValue) * 100}% 70%, 0% 50%)`,
-                `polygon(0% 100%, ${(value / maxValue) * 100}% 100%, ${(value / maxValue) * 100}% 30%, 0% 50%)`
-              ]
+              opacity: [0.8, 1, 0.8]
             }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          />
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {/* Animated Wave Top Edge */}
+            <svg
+              className="absolute -right-1 top-0 h-full w-4"
+              viewBox="0 0 10 60"
+              preserveAspectRatio="none"
+            >
+              <motion.path
+                d="M0,30 Q5,20 0,10 Q5,0 0,0 L10,0 L10,60 L0,60 Q5,50 0,40 Q5,30 0,30"
+                fill="url(#waveGradient)"
+                animate={{
+                  d: [
+                    "M0,30 Q5,20 0,10 Q5,0 0,0 L10,0 L10,60 L0,60 Q5,50 0,40 Q5,30 0,30",
+                    "M0,30 Q5,40 0,50 Q5,60 0,60 L10,60 L10,0 L0,0 Q5,10 0,20 Q5,30 0,30",
+                    "M0,30 Q5,20 0,10 Q5,0 0,0 L10,0 L10,60 L0,60 Q5,50 0,40 Q5,30 0,30"
+                  ]
+                }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <defs>
+                <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#8b5cf6" />
+                  <stop offset="100%" stopColor="#3b82f6" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </motion.div>
 
-          {/* Slider Input */}
-          <input
-            type="range"
-            min="1000"
-            max={maxValue}
-            step="1000"
-            value={value}
-            onChange={(e) => setValue(Number(e.target.value))}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-          />
-
-          {/* Wave Lines Effect */}
-          <div className="absolute inset-0 opacity-30">
+          {/* Wave Lines Effect Overlay */}
+          <div className="absolute inset-0 opacity-20 pointer-events-none">
             {[...Array(5)].map((_, i) => (
               <motion.div
                 key={i}
@@ -281,6 +285,17 @@ const WaveSlider = () => {
               />
             ))}
           </div>
+
+          {/* Slider Input */}
+          <input
+            type="range"
+            min="1000"
+            max={maxValue}
+            step="1000"
+            value={value}
+            onChange={(e) => setValue(Number(e.target.value))}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
+          />
         </div>
 
         {/* Slider Labels */}
@@ -358,15 +373,30 @@ const LoanCalculator = () => {
               <label className="text-slate-400 text-sm">Loan Amount</label>
               <span className="text-white font-semibold">${amount.toLocaleString()}</span>
             </div>
-            <input
-              type="range"
-              min="5000"
-              max="100000"
-              step="1000"
-              value={amount}
-              onChange={(e) => setAmount(Number(e.target.value))}
-              className="w-full"
-            />
+            <div className="relative h-12 flex items-center">
+              {/* Visible Track */}
+              <div className="absolute inset-x-0 h-3 bg-slate-800 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-violet-600 to-blue-500 transition-all duration-150"
+                  style={{ width: `${((amount - 5000) / (100000 - 5000)) * 100}%` }}
+                />
+              </div>
+              {/* Slider Input */}
+              <input
+                type="range"
+                min="5000"
+                max="100000"
+                step="1000"
+                value={amount}
+                onChange={(e) => setAmount(Number(e.target.value))}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+              />
+              {/* Custom Thumb (visible) */}
+              <div
+                className="absolute h-6 w-6 bg-gradient-to-r from-violet-500 to-blue-500 rounded-full border-2 border-white shadow-lg pointer-events-none transition-all duration-150"
+                style={{ left: `calc(${((amount - 5000) / (100000 - 5000)) * 100}% - 12px)` }}
+              />
+            </div>
           </div>
 
           {/* Duration */}
@@ -375,15 +405,30 @@ const LoanCalculator = () => {
               <label className="text-slate-400 text-sm">Duration (months)</label>
               <span className="text-white font-semibold">{months} months</span>
             </div>
-            <input
-              type="range"
-              min="12"
-              max="84"
-              step="6"
-              value={months}
-              onChange={(e) => setMonths(Number(e.target.value))}
-              className="w-full"
-            />
+            <div className="relative h-12 flex items-center">
+              {/* Visible Track */}
+              <div className="absolute inset-x-0 h-3 bg-slate-800 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-violet-600 to-blue-500 transition-all duration-150"
+                  style={{ width: `${((months - 12) / (84 - 12)) * 100}%` }}
+                />
+              </div>
+              {/* Slider Input */}
+              <input
+                type="range"
+                min="12"
+                max="84"
+                step="6"
+                value={months}
+                onChange={(e) => setMonths(Number(e.target.value))}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+              />
+              {/* Custom Thumb (visible) */}
+              <div
+                className="absolute h-6 w-6 bg-gradient-to-r from-violet-500 to-blue-500 rounded-full border-2 border-white shadow-lg pointer-events-none transition-all duration-150"
+                style={{ left: `calc(${((months - 12) / (84 - 12)) * 100}% - 12px)` }}
+              />
+            </div>
           </div>
 
           {/* Interest Rate */}
@@ -392,15 +437,30 @@ const LoanCalculator = () => {
               <label className="text-slate-400 text-sm">Interest Rate</label>
               <span className="text-white font-semibold">{interestRate}%</span>
             </div>
-            <input
-              type="range"
-              min="3.9"
-              max="15.9"
-              step="0.1"
-              value={interestRate}
-              onChange={(e) => setInterestRate(Number(e.target.value))}
-              className="w-full"
-            />
+            <div className="relative h-12 flex items-center">
+              {/* Visible Track */}
+              <div className="absolute inset-x-0 h-3 bg-slate-800 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-violet-600 to-blue-500 transition-all duration-150"
+                  style={{ width: `${((interestRate - 3.9) / (15.9 - 3.9)) * 100}%` }}
+                />
+              </div>
+              {/* Slider Input */}
+              <input
+                type="range"
+                min="3.9"
+                max="15.9"
+                step="0.1"
+                value={interestRate}
+                onChange={(e) => setInterestRate(Number(e.target.value))}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+              />
+              {/* Custom Thumb (visible) */}
+              <div
+                className="absolute h-6 w-6 bg-gradient-to-r from-violet-500 to-blue-500 rounded-full border-2 border-white shadow-lg pointer-events-none transition-all duration-150"
+                style={{ left: `calc(${((interestRate - 3.9) / (15.9 - 3.9)) * 100}% - 12px)` }}
+              />
+            </div>
           </div>
         </div>
 
@@ -839,32 +899,32 @@ function App() {
             <div>
               <h4 className="text-white font-semibold mb-4">Products</h4>
               <ul className="space-y-3 text-sm text-slate-500">
-                <li><a href="#" className="hover:text-white transition-colors">Checking Account</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Savings</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Credit Cards</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Loans</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Crypto</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center gap-2"><SafeIcon name="creditCard" size={14} /> Checking Account</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center gap-2"><SafeIcon name="trendingUp" size={14} /> Savings</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center gap-2"><SafeIcon name="creditCard" size={14} /> Credit Cards</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center gap-2"><SafeIcon name="wallet" size={14} /> Loans</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center gap-2"><SafeIcon name="bitcoin" size={14} /> Crypto</a></li>
               </ul>
             </div>
 
             <div>
               <h4 className="text-white font-semibold mb-4">Company</h4>
               <ul className="space-y-3 text-sm text-slate-500">
-                <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Press</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center gap-2"><SafeIcon name="globe" size={14} /> About Us</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center gap-2"><SafeIcon name="users" size={14} /> Careers</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center gap-2"><SafeIcon name="checkCircle" size={14} /> Press</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center gap-2"><SafeIcon name="sparkles" size={14} /> Blog</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center gap-2"><SafeIcon name="arrowRight" size={14} /> Contact</a></li>
               </ul>
             </div>
 
             <div>
               <h4 className="text-white font-semibold mb-4">Legal</h4>
               <ul className="space-y-3 text-sm text-slate-500">
-                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Cookie Policy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Security</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center gap-2"><SafeIcon name="shield" size={14} /> Privacy Policy</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center gap-2"><SafeIcon name="lock" size={14} /> Terms of Service</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center gap-2"><SafeIcon name="checkCircle" size={14} /> Cookie Policy</a></li>
+                <li><a href="#" className="hover:text-white transition-colors flex items-center gap-2"><SafeIcon name="shield" size={14} /> Security</a></li>
               </ul>
             </div>
           </div>
@@ -874,10 +934,10 @@ function App() {
               © 2024 Novus Financial. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
-              <SafeIcon name="twitter" size={20} className="text-slate-500 hover:text-white cursor-pointer transition-colors" />
-              <SafeIcon name="instagram" size={20} className="text-slate-500 hover:text-white cursor-pointer transition-colors" />
-              <SafeIcon name="linkedin" size={20} className="text-slate-500 hover:text-white cursor-pointer transition-colors" />
-              <SafeIcon name="github" size={20} className="text-slate-500 hover:text-white cursor-pointer transition-colors" />
+              <a href="#" className="text-slate-500 hover:text-white transition-colors"><SafeIcon name="twitter" size={20} /></a>
+              <a href="#" className="text-slate-500 hover:text-white transition-colors"><SafeIcon name="instagram" size={20} /></a>
+              <a href="#" className="text-slate-500 hover:text-white transition-colors"><SafeIcon name="linkedin" size={20} /></a>
+              <a href="#" className="text-slate-500 hover:text-white transition-colors"><SafeIcon name="github" size={20} /></a>
             </div>
           </div>
         </div>
