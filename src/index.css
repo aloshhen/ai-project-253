@@ -52,28 +52,48 @@
   @apply bg-violet-500;
 }
 
-/* Range input styling */
+/* Range input styling - Enhanced for visibility */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   background: transparent;
   cursor: pointer;
+  width: 100%;
 }
 
+input[type="range"]:focus {
+  outline: none;
+}
+
+/* Webkit (Chrome, Safari, Edge) */
 input[type="range"]::-webkit-slider-track {
-  @apply h-2 rounded-full bg-slate-800;
+  @apply h-3 rounded-full bg-slate-800;
 }
 
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  @apply w-6 h-6 rounded-full bg-gradient-to-r from-violet-500 to-blue-500 border-2 border-white shadow-lg -mt-2;
+  @apply w-6 h-6 rounded-full bg-gradient-to-r from-violet-500 to-blue-500 border-2 border-white shadow-lg;
+  margin-top: -6px;
+  cursor: grab;
 }
 
+input[type="range"]::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.1);
+}
+
+/* Firefox */
 input[type="range"]::-moz-range-track {
-  @apply h-2 rounded-full bg-slate-800;
+  @apply h-3 rounded-full bg-slate-800;
 }
 
 input[type="range"]::-moz-range-thumb {
   @apply w-6 h-6 rounded-full bg-gradient-to-r from-violet-500 to-blue-500 border-2 border-white shadow-lg;
+  cursor: grab;
+}
+
+input[type="range"]::-moz-range-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.1);
 }
